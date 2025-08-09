@@ -16,3 +16,6 @@ data/
 # Generated charts
 static/spending_by_category.png
 static/spending_pie.png
+
+# API keys and other secrets
+.env
