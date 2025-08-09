@@ -10,6 +10,17 @@ A Flask-based expense tracker application with multi-user support, CSV data stor
 - **Visualizations**: bar chart and pie chart for spending distribution.
 - **Responsive design** for desktop and mobile.
 
+## AI Insights
+
+This app integrates with the OpenAI API to provide tailored spending recommendations.  
+Once transactions are added, you can:
+
+1. **Generate Insights** – AI reviews your spending categories and identifies trends.
+2. **Refresh Insights** – Bypass the cached result to get updated tips based on new data.
+
+⚠️ You will need an OpenAI API key stored in a `.env` file:
+
+
 ## Tech Stack
 - **Backend**: Python, Flask, Pandas
 - **Frontend**: HTML, CSS (responsive design)
