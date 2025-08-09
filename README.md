@@ -35,7 +35,11 @@ flask run
 4. Access it in your browser at `http://127.0.0.1:5000`.
 
 ## Screenshots
-*(Add screenshots of transaction list, charts, and budget table here)*
+![Login](screenshots/Login.png)
+![Goals](screenshots/Goals.png)
+![Transactions](screenshots/Transactions.png)
+![Bar Chart](screenshots/BarChart.png)
+![Pie Chart](screenshots/PieChart.png)
 
 ## License
 This project is licensed under the MIT License.
