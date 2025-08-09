@@ -51,6 +51,7 @@ flask run
 ![Transactions](screenshots/Transactions.png)
 ![Bar Chart](screenshots/BarChart.png)
 ![Pie Chart](screenshots/PieChart.png)
+![AI Insights Refresh Screenshot](screenshots/AI%20Insights%20Example.png)
 
 ## License
 This project is licensed under the MIT License.
