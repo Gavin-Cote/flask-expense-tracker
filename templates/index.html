@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MSU Expense Tracker</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MSU Expense Tracker</h1>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div></div>
+            <div>
+                {% if current_user.is_authenticated %}
+                    Logged in as <strong>{{ current_user.email }}</strong>
+                    &nbsp;•&nbsp;
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login">Login</a> | <a href="/register">Register</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash">
+              {% for message in messages %}{{ message }}{% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Transaction Form -->
+        <form method="POST" action="/">
+            <input type="hidden" name="edit_index" value="{{ edit_data.Id if edit_data else '' }}">
+            <label>Date: <input type="date" name="date" value="{{ edit_data.Date if edit_data else '' }}" required></label>
+            <label>Description: <input type="text" name="description" value="{{ edit_data.Description if edit_data else '' }}" required></label>
+            <label>Category: <input type="text" name="category" value="{{ edit_data.Category if edit_data else '' }}" required></label>
+            <label>Amount: <input type="number" name="amount" step="0.01" min="0" max="10000000" value="{{ edit_data.Amount if edit_data else '' }}" required></label>
+            <button type="submit">{{ 'Update' if edit_data else 'Add' }} Transaction</button>
+        </form>
+
+        <!-- Goal Form -->
+        <h2>{{ 'Edit Goal' if goal_edit_data else 'Set Spending Goal' }}</h2>
+        <form method="POST" action="/set-goal">
+            <input type="hidden" name="goal_edit_index" value="{{ goal_edit_data.GoalId if goal_edit_data else '' }}">
+            <label>Month: <input type="month" name="goal_month" value="{{ goal_edit_data.Month if goal_edit_data else '' }}" required></label>
+            <label>Category: <input type="text" name="goal_category" value="{{ goal_edit_data.Category if goal_edit_data else '' }}" required></label>
+            <label>Goal Amount: <input type="number" name="goal_amount" step="0.01" min="0" max="10000000" value="{{ goal_edit_data.Goal if goal_edit_data else '' }}" required></label>
+            <button type="submit">{{ 'Update Goal' if goal_edit_data else 'Set Goal' }}</button>
+        </form>
+
+        <!-- Transactions Table -->
+        <h2>Transactions</h2>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Amount ($)</th>
+                <th>Actions</th>
+            </tr>
+            {% for t in transactions %}
+            <tr>
+                <td>{{ t.Date }}</td>
+                <td>{{ t.Description }}</td>
+                <td>{{ t.Category }}</td>
+                <td>{{ '%.2f'|format(t.Amount) }}</td>
+                <td>
+                    <a href="/?edit={{ t.Id }}">Edit</a>
+                    <form method="POST" action="/delete" style="display:inline;">
+                        <input type="hidden" name="id" value="{{ t.Id }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if has_transactions %}
+        <!-- Charts -->
+        <h2>Spending by Category</h2>
+        <img src="/static/spending_by_category.png" alt="Spending Bar Chart">
+
+        <h2>Spending Distribution</h2>
+        <img src="/static/spending_pie.png" alt="Spending Pie Chart">
+        {% endif %}
+
+        <!-- Goals/Comparison Table with Goal Actions -->
+        <h2>Monthly Budget Comparison</h2>
+        <table>
+            <tr>
+                <th>Month</th>
+                <th>Category</th>
+                <th>Goal ($)</th>
+                <th>Spent ($)</th>
+                <th>Remaining ($)</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for row in comparisons %}
+            <tr>
+                <td>{{ row.Month }}</td>
+                <td>{{ row.Category }}</td>
+                <td>{{ '%.2f'|format(row.Goal) }}</td>
+                <td>{{ '%.2f'|format(row.Amount) }}</td>
+                <td>{{ '%.2f'|format(row.Remaining) }}</td>
+                <td class="{{ 'status-under' if row.Status == 'Under Budget' else 'status-over' }}">{{ row.Status }}</td>
+                <td>
+                    <a href="/?goal_edit={{ row.GoalId }}">Edit Goal</a>
+                    <form method="POST" action="/delete-goal" style="display:inline;">
+                        <input type="hidden" name="goal_id" value="{{ row.GoalId }}">
+                        <button type="submit">Delete Goal</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

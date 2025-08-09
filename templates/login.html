@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ 'Register' if mode == 'register' else 'Login' }} – MSU Expense Tracker</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    .auth-card { max-width: 420px; margin: 60px auto; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+    .auth-card h1 { text-align:center; margin-top:0; color:#18453B; }
+    .auth-card form { display:flex; flex-direction:column; gap:12px; }
+    .auth-card input { padding:10px; border:1px solid #CCC; border-radius:6px; font-size:16px; }
+    .auth-actions { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+    .muted { color:#666; font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="auth-card">
+    <h1>{{ 'Create Account' if mode == 'register' else 'Welcome Back' }}</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">
+          {% for message in messages %}{{ message }}{% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/{{ 'register' if mode == 'register' else 'login' }}">
+      <label>Email
+        <input type="email" name="email" placeholder="you@msu.edu" required />
+      </label>
+      <label>Password
+        <input type="password" name="password" placeholder="••••••••" minlength="6" required />
+      </label>
+      <button type="submit">{{ 'Create Account' if mode == 'register' else 'Login' }}</button>
+    </form>
+
+    <div class="auth-actions">
+      {% if mode == 'register' %}
+        <span class="muted">Already have an account?</span>
+        <a href="/login">Log in</a>
+      {% else %}
+        <span class="muted">New here?</span>
+        <a href="/register">Create an account</a>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
