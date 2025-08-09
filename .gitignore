@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local DB/data (don’t publish your data)
+expense_tracker.db
+instance/
+data/
+*.sqlite
+
+# Generated charts
+static/spending_by_category.png
+static/spending_pie.png
